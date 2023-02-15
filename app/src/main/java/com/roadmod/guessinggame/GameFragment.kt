@@ -1,11 +1,11 @@
 package com.roadmod.guessinggame
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.roadmod.guessinggame.databinding.FragmentGameBinding
@@ -25,11 +25,23 @@ class GameFragment : Fragment() {
 
         viewModel = ViewModelProvider(this)[GameViewModel::class.java]
 
-        updateScreen()
+
+        viewModel.secretWordDisplay.observe(viewLifecycleOwner, Observer { newValue ->
+            binding.word.text = newValue
+        })
+
+
+        viewModel.livesLeft.observe(viewLifecycleOwner, Observer {newValue ->
+            binding.lives.text = "You have $newValue lives left."
+        })
+
+        viewModel.incorrectGuesses.observe(viewLifecycleOwner, Observer {newValue ->
+            binding.incorrectGuesses.text = "Incorrect guesses: $newValue"
+        })
+
         binding.guessButton.setOnClickListener(){
             viewModel.makeGuess(binding.guess.text.toString().uppercase())
             binding.guess.text = null
-            updateScreen()
             if( viewModel.isWon() || viewModel.isLost()){
                 val action = GameFragmentDirections
                     .actionGameFragmentToResultFragment(viewModel.wonLostMessage())
@@ -43,12 +55,4 @@ class GameFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
-    @SuppressLint("SetTextI18n")
-    fun updateScreen(){
-        binding.word.text = viewModel.secretWordDisplay
-        binding.lives.text = "You have ${viewModel.livesLeft} lives left."
-        binding.incorrectGuesses.text = "Incorrect guesses: ${viewModel.incorrectGuesses}"
-    }
-
 }
