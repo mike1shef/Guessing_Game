@@ -41,6 +41,9 @@ class GameFragment : Fragment() {
 //        viewModel.incorrectGuesses.observe(viewLifecycleOwner, Observer {newValue ->
 //            binding.incorrectGuesses.text = "Incorrect guesses: $newValue"
 //        })
+        binding.finishGameButton.setOnClickListener {
+            viewModel.finishGame()
+        }
 
         viewModel.gameOver.observe(viewLifecycleOwner, Observer { newValue ->
             if (newValue){
