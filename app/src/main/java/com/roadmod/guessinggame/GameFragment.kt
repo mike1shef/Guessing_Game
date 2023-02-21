@@ -24,20 +24,23 @@ class GameFragment : Fragment() {
         val view = binding.root
 
         viewModel = ViewModelProvider(this)[GameViewModel::class.java]
+        binding.gameViewModel = viewModel
+
+        binding.lifecycleOwner = viewLifecycleOwner
 
 
-        viewModel.secretWordDisplay.observe(viewLifecycleOwner, Observer { newValue ->
-            binding.word.text = newValue
-        })
-
-
-        viewModel.livesLeft.observe(viewLifecycleOwner, Observer {newValue ->
-            binding.lives.text = "You have $newValue lives left."
-        })
-
-        viewModel.incorrectGuesses.observe(viewLifecycleOwner, Observer {newValue ->
-            binding.incorrectGuesses.text = "Incorrect guesses: $newValue"
-        })
+//        viewModel.secretWordDisplay.observe(viewLifecycleOwner, Observer { newValue ->
+//            binding.word.text = newValue
+//        })
+//
+//
+//        viewModel.livesLeft.observe(viewLifecycleOwner, Observer {newValue ->
+//            binding.lives.text = "You have $newValue lives left."
+//        })
+//
+//        viewModel.incorrectGuesses.observe(viewLifecycleOwner, Observer {newValue ->
+//            binding.incorrectGuesses.text = "Incorrect guesses: $newValue"
+//        })
 
         viewModel.gameOver.observe(viewLifecycleOwner, Observer { newValue ->
             if (newValue){
